@@ -1,4 +1,4 @@
-package com.ljc.autapi.utils;
+package com.ljc.autapi.readExcel;
 
 import com.alibaba.excel.annotation.ExcelProperty;
 import com.alibaba.excel.metadata.BaseRowModel;

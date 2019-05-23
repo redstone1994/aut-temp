@@ -1,4 +1,4 @@
-package com.ljc.autapi.utils;
+package com.ljc.autapi.readExcel;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -12,6 +12,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.ljc.autapi.utils.FileUtil;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -87,7 +88,7 @@ public class ExcelUtil {
      */
     public Map<Integer, Map<Integer, String>> readExcelContent() throws Exception {
 
-        File excelFile = new File(String.valueOf(FileUtil.getResourcesFileInputStream("data/api.xlsx"))); // 创建文件对象
+        File excelFile = new File(String.valueOf(FileUtil.getResourcesFileInputStream("api.xlsx"))); // 创建文件对象
 
         FileInputStream in = new FileInputStream(excelFile); // 文件流
         checkExcelVaild(excelFile);

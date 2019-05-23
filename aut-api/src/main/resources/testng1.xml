@@ -2,7 +2,7 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
 <suite name="All Test Suite">
     <listeners>
-        <listener class-name="com.ljc.autapi.utils.RetryListener" />
+        <listener class-name="com.ljc.autapi.listener.RetryListener" />
     </listeners>
     <test verbose="2" name="test2">
         <classes>
