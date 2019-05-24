@@ -3,14 +3,20 @@ package com.ljc.autapi.testCase;
 import com.ljc.autapi.readExcel.ContentType;
 import com.ljc.autapi.readExcel.EasyExcel;
 import com.ljc.autapi.readExcel.ExcelModel;
-import com.ljc.autapi.utils.*;
+import com.ljc.autapi.utils.ApiTool;
+import com.ljc.autapi.utils.ApiUtil;
+import com.ljc.autapi.utils.JsonUtil;
+import com.ljc.autapi.utils.ObjectUtil;
 import io.restassured.RestAssured;
 import io.restassured.config.SSLConfig;
 import io.restassured.http.Headers;
 import io.restassured.response.Response;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.stereotype.Component;
+import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -27,11 +33,12 @@ import static io.restassured.RestAssured.given;
  **/
 
 @SpringBootTest
+@RunWith(SpringRunner.class)
 @Slf4j
 public class ApiTest extends AbstractTestNGSpringContextTests {
 
     @Autowired
-    private ApiUtil apiUtil;
+    private ApiTool apiTool;
 
     @Test
     public void test() {
@@ -52,24 +59,25 @@ public class ApiTest extends AbstractTestNGSpringContextTests {
         // 打印出 response 的body
         log.info(response.asString());
     }
-    private static Map<String,String > cookies=new HashMap<>();
-    private static Headers heards=null;
 
-    @BeforeClass
-    public void init(){
+    private static Map<String, String> cookies = new HashMap<>();
+    private static Headers heards = null;
+
+    //    @BeforeClass
+    public void init() {
         for (Object a : EasyExcel.readExcel("api.xlsx", 2, 1, ExcelModel.class)) {
             ExcelModel ss = (ExcelModel) a;
             if (ObjectUtil.isNotNull(ss)) {
-                StringBuffer sb=new StringBuffer();
+                StringBuffer sb = new StringBuffer();
                 sb.append(ss.getProtocol());
                 sb.append("://");
                 sb.append(ss.getHost());
                 sb.append(ss.getPath());
                 log.info(sb.toString());
-                Response http = apiUtil.getHttp(sb.toString(), JsonUtil.jsonToMap(ss.getParameters()), ContentType.FORM);
+                Response http = apiTool.getHttp(sb.toString(), JsonUtil.jsonToMap(ss.getParameters()), "");
                 log.info(String.valueOf(http.getStatusCode()));
-                cookies=http.getCookies();
-                heards=http.getHeaders();
+                cookies = http.getCookies();
+                heards = http.getHeaders();
                 log.info(http.asString());
                 log.info(String.valueOf(cookies));
                 log.info(String.valueOf(heards));
@@ -79,21 +87,33 @@ public class ApiTest extends AbstractTestNGSpringContextTests {
     }
 
     @Test
-    public void aaa() {
+    public void aaa() throws InterruptedException {
+
         for (Object a : EasyExcel.readExcel("api.xlsx", 2, 1, ExcelModel.class)) {
             ExcelModel aa = (ExcelModel) a;
             if (ObjectUtil.isNotNull(aa)) {
-                StringBuffer sb=new StringBuffer();
+                StringBuffer sb = new StringBuffer();
                 sb.append(aa.getProtocol());
                 sb.append("://");
                 sb.append(aa.getHost());
                 sb.append(aa.getPath());
                 log.info(sb.toString());
-                Response http = apiUtil.getHttp(sb.toString(), JsonUtil.jsonToMap(aa.getParameters()), ContentType.FORM);
-                log.info(String.valueOf(http.getStatusCode()));
-                log.info(http.asString());
+                Response http = apiTool.getHttp(sb.toString(), JsonUtil.jsonToMap(aa.getParameters()), ContentType.FORM);
+                if (http == null) {
+                    log.info("=====================");
+                } else {
+                    log.info(String.valueOf(http.getStatusCode()));
+                    log.info(http.asString());
+                }
+
             }
 
         }
     }
+
+    @Test
+    public void ttt() {
+        apiTool.sss();
+    }
+
 }

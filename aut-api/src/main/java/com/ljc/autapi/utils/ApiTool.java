@@ -4,28 +4,31 @@ import io.restassured.RestAssured;
 import io.restassured.config.SSLConfig;
 import io.restassured.response.Response;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 import java.util.Map;
 
-import static io.restassured.RestAssured.given;
-
+/**
+ * @Author Lijc
+ * @Description
+ * @Date 2019/5/24-16:16
+ **/
 @Component
 @Slf4j
-public class ApiUtilImpl implements ApiUtil {
+@Async
+public class ApiTool {
 
-    @Override
     public Response postLogin(String uri, String parm, String contentType) {
-        return given()
+        return RestAssured.given()
                 .config((RestAssured.config().sslConfig(new SSLConfig().relaxedHTTPSValidation())))
                 .contentType(contentType)
                 .body(parm)
                 .get(uri);
     }
 
-    @Override
     public Response postLogin(String uri, Map parm, String contentType) {
-        Response response = given()
+        Response response = RestAssured.given()
                 .config((RestAssured.config().sslConfig(new SSLConfig().relaxedHTTPSValidation())))
                 .contentType(contentType)
                 .body(parm)
@@ -33,47 +36,27 @@ public class ApiUtilImpl implements ApiUtil {
         return response;
     }
 
-    /**
-     * @param uri         url
-     * @param parm        json参数
-     * @param contentType contentType
-     * @return
-     */
-    @Override
-    public Response getHttp(String uri, String parm, String contentType) {
-            Response response = given()
-                    .config((RestAssured.config().sslConfig(new SSLConfig().relaxedHTTPSValidation())))
-                    .contentType(contentType)
-                    .body(parm)
-                    .get(uri);
-            return response;
+    public Response getHttp(String uri, String parm, String contentType) throws InterruptedException {
+        log.info("sssssssssssssssss====================");
+        Response response = RestAssured.given()
+                .config((RestAssured.config().sslConfig(new SSLConfig().relaxedHTTPSValidation())))
+                .contentType(contentType)
+                .body(parm)
+                .get(uri);
+        return response;
     }
 
-    /**
-     * @param uri         url
-     * @param parm        form表单参数
-     * @param contentType contentType
-     * @return
-     */
-    @Override
     public Response getHttp(String uri, Map parm, String contentType) {
-            Response response = given()
-                    .config((RestAssured.config().sslConfig(new SSLConfig().relaxedHTTPSValidation())))
-                    .contentType(contentType)
-                    .params(parm)
-                    .get(uri);
-            return response;
+        Response response = RestAssured.given()
+                .config((RestAssured.config().sslConfig(new SSLConfig().relaxedHTTPSValidation())))
+//                .contentType(contentType)
+                .body(parm)
+                .post(uri);
+        return response;
     }
 
-    /**
-     * @param uri         url
-     * @param parm        json参数
-     * @param contentType contentType
-     * @return
-     */
-    @Override
     public Response postHttp(String uri, String parm, String contentType) {
-        Response response = given()
+        Response response = RestAssured.given()
                 .config((RestAssured.config().sslConfig(new SSLConfig().relaxedHTTPSValidation())))
                 .contentType(contentType)
                 .body(parm)
@@ -81,19 +64,21 @@ public class ApiUtilImpl implements ApiUtil {
         return response;
     }
 
-    /**
-     * @param uri         url
-     * @param parm        form表单参数
-     * @param contentType contentType
-     * @return
-     */
-    @Override
     public Response postHttp(String uri, Map parm, String contentType) {
-        Response response = given()
+        Response response = RestAssured.given()
                 .config((RestAssured.config().sslConfig(new SSLConfig().relaxedHTTPSValidation())))
                 .contentType(contentType)
                 .body(parm)
                 .post(uri);
         return response;
+    }
+
+    public void sss() {
+
+        for (int i = 0; i <= 10; i++) {
+            String a = "aaa";
+            log.info("asdadasa-----asdadad------");
+        }
+
     }
 }

@@ -5,6 +5,8 @@ import com.alibaba.excel.metadata.BaseRowModel;
 import com.alibaba.excel.metadata.Sheet;
 import com.ljc.autapi.utils.FileUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.io.InputStream;
