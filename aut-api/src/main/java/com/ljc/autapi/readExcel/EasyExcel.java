@@ -5,7 +5,6 @@ import com.alibaba.excel.metadata.BaseRowModel;
 import com.alibaba.excel.metadata.Sheet;
 import com.ljc.autapi.utils.FileUtil;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -18,6 +17,7 @@ import java.util.List;
  * @Date 2019/5/16-14:10
  **/
 @Slf4j
+@Component
 public class EasyExcel {
 
     /**
@@ -27,7 +27,7 @@ public class EasyExcel {
      * @param object      继承BaseRowModel的实体
      * @return
      */
-    public static List<Object> readExcel(String fileName, int sheetNo, int headLineMun, Class<? extends BaseRowModel> object) {
+    public List<Object> readExcel(String fileName, int sheetNo, int headLineMun, Class<? extends BaseRowModel> object) {
         InputStream inputStream = FileUtil.getResourcesFileInputStream(fileName);
         try {
             // 解析每行结果在listener中处理
@@ -48,16 +48,6 @@ public class EasyExcel {
         return null;
     }
 
-//    @Test
-//    public void t() {
-//        for (Object a : readExcel("api.xlsx", 1, 2, ExcelModel.class)) {
-//            ExcelModel aa = (ExcelModel) a;
-//            if (ObjectUtil.isNotNull(aa)) {
-//                System.out.println(aa.getHost());
-//                log.info(aa.getParameters());
-//            }
-//
-//        }
-//    }
+
 
 }

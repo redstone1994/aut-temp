@@ -11,6 +11,10 @@
 
     <artifactId>aut-web</artifactId>
     <properties>
+        <java.version>1.8</java.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.build.targetEncoding>UTF-8</project.build.targetEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <selenide.version>5.2.2</selenide.version>
     </properties>
     <dependencies>
