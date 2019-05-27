@@ -2,12 +2,12 @@ package com.ljc.autapi.testCase;
 
 import com.ljc.autapi.readExcel.ContentType;
 import com.ljc.autapi.readExcel.EasyExcel;
-import com.ljc.autapi.readExcel.ExcelListener;
 import com.ljc.autapi.readExcel.ExcelModel;
 import com.ljc.autapi.utils.ApiTool;
 import com.ljc.autapi.utils.JsonUtil;
 import com.ljc.autapi.utils.ObjectUtil;
 import io.restassured.RestAssured;
+import io.restassured.config.ConnectionConfig;
 import io.restassured.config.SSLConfig;
 import io.restassured.http.Headers;
 import io.restassured.response.Response;
@@ -19,6 +19,7 @@ import org.testng.annotations.Test;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import static io.restassured.RestAssured.given;
 
@@ -51,6 +52,7 @@ public class ApiTest extends AbstractTestNGSpringContextTests {
 //        "seen_ids=&count=5&only_unfollowed=true"
         Response response = given()
                 .config((RestAssured.config().sslConfig(new SSLConfig().relaxedHTTPSValidation())))
+                .config(RestAssured.config().connectionConfig(ConnectionConfig.connectionConfig().closeIdleConnectionsAfterEachResponseAfter(2, TimeUnit.SECONDS)))
                 .contentType("application/x-www-form-urlencoded")
                 .params(map)
                 .baseUri("http://www.jianshu.com")
@@ -74,6 +76,7 @@ public class ApiTest extends AbstractTestNGSpringContextTests {
                 sb.append(ss.getHost());
                 sb.append(ss.getPath());
                 log.info(sb.toString());
+
                 Response http = apiTool.getHttp(sb.toString(), JsonUtil.jsonToMap(ss.getParameters()), "");
                 log.info(String.valueOf(http.getStatusCode()));
                 cookies = http.getCookies();
@@ -87,7 +90,7 @@ public class ApiTest extends AbstractTestNGSpringContextTests {
     }
 
     @Test
-    public void aaa() {
+    public void http() {
 
         for (Object a : easyExcel.readExcel("api.xlsx", 2, 1, ExcelModel.class)) {
             ExcelModel aa = (ExcelModel) a;
