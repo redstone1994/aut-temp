@@ -7,7 +7,9 @@ import com.ljc.autapi.readExcel.InitModel;
 import com.ljc.autapi.utils.ApiTool;
 import com.ljc.autapi.utils.JsonUtil;
 import com.ljc.autapi.utils.ObjectUtil;
+import io.qameta.allure.Allure;
 import io.restassured.RestAssured;
+import io.restassured.config.SSLConfig;
 import io.restassured.http.Headers;
 import io.restassured.response.Response;
 import lombok.extern.slf4j.Slf4j;
@@ -17,8 +19,12 @@ import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
+import static io.qameta.allure.Allure.step;
+
 import java.util.HashMap;
 import java.util.Map;
+
+import static io.restassured.RestAssured.given;
 
 /**
  * @Author Lijc
@@ -42,7 +48,7 @@ public class ApiTest extends AbstractTestNGSpringContextTests {
     private Map<String, String> cookies = new HashMap<>();
     private Headers heards = null;
 
-    @BeforeClass
+//    @BeforeClass
     public void init() {
         for (Object object : easyExcel.readExcel(FILENAME, 1, 2, InitModel.class)) {
             InitModel initModel = (InitModel) object;
@@ -54,7 +60,7 @@ public class ApiTest extends AbstractTestNGSpringContextTests {
                 baseUri = sb.toString();
                 log.info("接口地址为：" + baseUri);
                 if (ObjectUtil.isNotNull(initModel.getPath()) && initModel.getContentType().equalsIgnoreCase(ContentType.FORM)) {
-                    Response http = apiTool.postLogin(baseUri, JsonUtil.jsonToMap(initModel.getParameters()), initModel.getContentType());
+                    Response http = apiTool.postLogin(baseUri, JsonUtil.jsonToMap(initModel.getParameters()));
                     log.info(String.valueOf(http.getStatusCode()));
                     cookies = http.getCookies();
                     heards = http.getHeaders();
@@ -62,7 +68,7 @@ public class ApiTest extends AbstractTestNGSpringContextTests {
                     log.info(String.valueOf(cookies));
                     log.info(String.valueOf(heards));
                 } else if (initModel.getContentType().equalsIgnoreCase(ContentType.JSON)) {
-                    Response http = apiTool.postLogin(baseUri, initModel.getParameters(), initModel.getContentType());
+                    Response http = apiTool.postLogin(baseUri, initModel.getParameters());
                     log.info(String.valueOf(http.getStatusCode()));
                     cookies = http.getCookies();
                     heards = http.getHeaders();
@@ -88,16 +94,21 @@ public class ApiTest extends AbstractTestNGSpringContextTests {
             if (ObjectUtil.isNotNull(infoModel.getId()) && JsonUtil.isJson(infoModel.getParameters())) {
 
                 if (infoModel.getMethod().equalsIgnoreCase(GET)) {
-                    Response http = apiTool.getHttp(infoModel.getPath(), JsonUtil.jsonToMap(infoModel.getParameters()), ContentType.FORM, cookies);
+                    Response http = apiTool.getHttp(infoModel.getPath(), JsonUtil.jsonToMap(infoModel.getParameters()), cookies);
                     log.info(String.valueOf(http.getStatusCode()));
+                    step(http.asString());
+                    Allure.addAttachment("状态", String.valueOf(http.getStatusCode()));
+                    Allure.addAttachment("时间", String.valueOf(http.getTime()));
+                    System.out.println(http.getHeaders());
                     log.info(http.asString());
-                    log.info(http.getContentType());
+                    http.print();
                 } else if (infoModel.getMethod().equalsIgnoreCase(POST) && infoModel.getContentType().equalsIgnoreCase(ContentType.FORM)) {
-                    Response http = apiTool.postHttp(infoModel.getPath(), JsonUtil.jsonToMap(infoModel.getParameters()), ContentType.FORM);
+                    Response http = apiTool.postHttp(infoModel.getPath(), JsonUtil.jsonToMap(infoModel.getParameters()));
                     log.info(String.valueOf(http.getStatusCode()));
+
                     log.info(http.asString());
                 } else if (infoModel.getMethod().equalsIgnoreCase(POST) && infoModel.getContentType().equalsIgnoreCase(ContentType.JSON)) {
-                    Response http = apiTool.postHttp(infoModel.getPath(), infoModel.getParameters(), ContentType.JSON);
+                    Response http = apiTool.postHttp(infoModel.getPath(), infoModel.getParameters());
                     log.info(String.valueOf(http.getStatusCode()));
                     log.info(http.asString());
                 }

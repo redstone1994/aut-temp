@@ -19,48 +19,47 @@ import static io.restassured.RestAssured.given;
 @Slf4j
 public class ApiTool {
 
-    public Response postLogin(String uri, String parm, String contentType) {
+    public Response postLogin(String uri, String parm) {
         return given()
                 .config((RestAssured.config().sslConfig(new SSLConfig().relaxedHTTPSValidation())))
-                .contentType(contentType)
                 .body(parm)
                 .get(uri);
     }
 
-    public Response postLogin(String uri, Map parm, String contentType) {
+    public Response postLogin(String uri, Map parm) {
         Response response = given()
                 .config((RestAssured.config().sslConfig(new SSLConfig().relaxedHTTPSValidation())))
-                .contentType(contentType)
+                .header("User-Agent","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36")
                 .body(parm)
                 .get(uri);
         return response;
     }
 
-    public Response getHttp(String path, Map parm, String contentType,Map cookies) {
+    public Response getHttp(String path, Map parm,Map cookies) {
 
         Response response = given()
                 .config((RestAssured.config().sslConfig(new SSLConfig().relaxedHTTPSValidation())))
-                .contentType(contentType)
+                .header("User-Agent","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36")
                 .params(parm)
                 .cookies(cookies)
                 .when()
-                .post(path);
+                .get(path);
         return response;
     }
 
-    public Response postHttp(String path, String parm, String contentType) {
+    public Response postHttp(String path, String parm) {
         Response response = given()
                 .config((RestAssured.config().sslConfig(new SSLConfig().relaxedHTTPSValidation())))
-                .contentType(contentType)
+                .header("User-Agent","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36")
                 .body(parm)
                 .post(path);
         return response;
     }
 
-    public Response postHttp(String path, Map parm, String contentType) {
+    public Response postHttp(String path, Map parm) {
         Response response = given()
                 .config((RestAssured.config().sslConfig(new SSLConfig().relaxedHTTPSValidation())))
-                .contentType(contentType)
+                .header("User-Agent","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36")
                 .body(parm)
                 .post(path);
         return response;
