@@ -1,4 +1,4 @@
-package com.ljc.element;
+package com.ljc.pageObject;
 
 public interface IndexDom {
     String INPUT="#kw";//输入框

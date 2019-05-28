@@ -8,18 +8,16 @@ import com.alibaba.excel.metadata.BaseRowModel;
  * @Description excel  model
  * @Date 2019/4/28-10:31
  **/
-public class ExcelModel extends BaseRowModel {
+public class InfoModel extends BaseRowModel {
     @ExcelProperty(index = 0)
     private String id;
     @ExcelProperty(index = 1)
-    private String protocol;
-    @ExcelProperty(index = 2)
     private String method;
+    @ExcelProperty(index = 2)
+    private String contentType;
     @ExcelProperty(index = 3)
-    private String host;
-    @ExcelProperty(index = 4)
     private String path;
-    @ExcelProperty(index = 5)
+    @ExcelProperty(index = 4)
     private String parameters;
 
     public String getId() {
@@ -30,14 +28,6 @@ public class ExcelModel extends BaseRowModel {
         this.id = id;
     }
 
-    public String getProtocol() {
-        return protocol;
-    }
-
-    public void setProtocol(String protocol) {
-        this.protocol = protocol;
-    }
-
     public String getMethod() {
         return method;
     }
@@ -46,12 +36,12 @@ public class ExcelModel extends BaseRowModel {
         this.method = method;
     }
 
-    public String getHost() {
-        return host;
+    public String getContentType() {
+        return contentType;
     }
 
-    public void setHost(String host) {
-        this.host = host;
+    public void setContentType(String contentType) {
+        this.contentType = contentType;
     }
 
     public String getPath() {
@@ -72,11 +62,10 @@ public class ExcelModel extends BaseRowModel {
 
     @Override
     public String toString() {
-        return "{" +
+        return "InfoModel{" +
                 "id='" + id + '\'' +
-                ", protocol='" + protocol + '\'' +
                 ", method='" + method + '\'' +
-                ", host='" + host + '\'' +
+                ", contentType='" + contentType + '\'' +
                 ", path='" + path + '\'' +
                 ", parameters='" + parameters + '\'' +
                 '}';

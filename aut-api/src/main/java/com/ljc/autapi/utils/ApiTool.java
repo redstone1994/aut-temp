@@ -12,7 +12,7 @@ import static io.restassured.RestAssured.given;
 
 /**
  * @Author Lijc
- * @Description
+ * @Description 接口访问工具
  * @Date 2019/5/24-16:16
  **/
 @Component
@@ -36,42 +36,33 @@ public class ApiTool {
         return response;
     }
 
-    public Response getHttp(String uri, String parm, String contentType) {
-
-        Response response = given()
-                .config((RestAssured.config().sslConfig(new SSLConfig().relaxedHTTPSValidation())))
-                .contentType(contentType)
-                .param(parm)
-                .get(uri);
-        return response;
-    }
-
-    public Response getHttp(String uri, Map parm, String contentType) {
+    public Response getHttp(String path, Map parm, String contentType,Map cookies) {
 
         Response response = given()
                 .config((RestAssured.config().sslConfig(new SSLConfig().relaxedHTTPSValidation())))
                 .contentType(contentType)
                 .params(parm)
+                .cookies(cookies)
                 .when()
-                .post(uri);
+                .post(path);
         return response;
     }
 
-    public Response postHttp(String uri, String parm, String contentType) {
+    public Response postHttp(String path, String parm, String contentType) {
         Response response = given()
                 .config((RestAssured.config().sslConfig(new SSLConfig().relaxedHTTPSValidation())))
                 .contentType(contentType)
                 .body(parm)
-                .post(uri);
+                .post(path);
         return response;
     }
 
-    public Response postHttp(String uri, Map parm, String contentType) {
+    public Response postHttp(String path, Map parm, String contentType) {
         Response response = given()
                 .config((RestAssured.config().sslConfig(new SSLConfig().relaxedHTTPSValidation())))
                 .contentType(contentType)
                 .body(parm)
-                .post(uri);
+                .post(path);
         return response;
     }
 

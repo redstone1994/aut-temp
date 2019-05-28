@@ -2,26 +2,23 @@ package com.ljc.autapi.testCase;
 
 import com.ljc.autapi.readExcel.ContentType;
 import com.ljc.autapi.readExcel.EasyExcel;
-import com.ljc.autapi.readExcel.ExcelModel;
+import com.ljc.autapi.readExcel.InfoModel;
+import com.ljc.autapi.readExcel.InitModel;
 import com.ljc.autapi.utils.ApiTool;
 import com.ljc.autapi.utils.JsonUtil;
 import com.ljc.autapi.utils.ObjectUtil;
 import io.restassured.RestAssured;
-import io.restassured.config.ConnectionConfig;
-import io.restassured.config.SSLConfig;
 import io.restassured.http.Headers;
 import io.restassured.response.Response;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
-
-import static io.restassured.RestAssured.given;
 
 /**
  * @Author Lijc
@@ -35,98 +32,79 @@ public class ApiTest extends AbstractTestNGSpringContextTests {
 
     @Autowired
     private ApiTool apiTool;
-
     @Autowired
     private EasyExcel easyExcel;
 
-    @Test
-    public void test() {
-        String ss = "{\"pno\":1,\"ps\":30,\"dtype\":\"json\",\"key\":\"4beb9d77d2b95ce9bec6d8363ee5a620\"}";
+    private static final String FILENAME = "api.xlsx";
+    private static final String POST = "post";
+    private static final String GET = "get";
+    private String baseUri = "";
+    private Map<String, String> cookies = new HashMap<>();
+    private Headers heards = null;
 
-        log.info(String.valueOf(JsonUtil.isJson(ss)));
-    }
-
-    @Test
-    public void getHttp() {
-        Map<String, Object> map = new HashMap<>();
-//        "seen_ids=&count=5&only_unfollowed=true"
-        Response response = given()
-                .config((RestAssured.config().sslConfig(new SSLConfig().relaxedHTTPSValidation())))
-                .config(RestAssured.config().connectionConfig(ConnectionConfig.connectionConfig().closeIdleConnectionsAfterEachResponseAfter(2, TimeUnit.SECONDS)))
-                .contentType("application/x-www-form-urlencoded")
-                .params(map)
-                .baseUri("http://www.jianshu.com")
-                .when()
-                .get("users/recommended");
-        // 打印出 response 的body
-        log.info(response.asString());
-    }
-
-    private static Map<String, String> cookies = new HashMap<>();
-    private static Headers heards = null;
-
-    //    @BeforeClass
+    @BeforeClass
     public void init() {
-        for (Object a : easyExcel.readExcel("api.xlsx", 2, 1, ExcelModel.class)) {
-            ExcelModel ss = (ExcelModel) a;
-            if (ObjectUtil.isNotNull(ss)) {
+        for (Object object : easyExcel.readExcel(FILENAME, 1, 2, InitModel.class)) {
+            InitModel initModel = (InitModel) object;
+            if (ObjectUtil.isNotNull(initModel.getHost()) && ObjectUtil.isNotNull(initModel.getProtocol())) {
                 StringBuffer sb = new StringBuffer();
-                sb.append(ss.getProtocol());
+                sb.append(initModel.getProtocol());
                 sb.append("://");
-                sb.append(ss.getHost());
-                sb.append(ss.getPath());
-                log.info(sb.toString());
+                sb.append(initModel.getHost());
+                baseUri = sb.toString();
+                log.info("接口地址为：" + baseUri);
+                if (ObjectUtil.isNotNull(initModel.getPath()) && initModel.getContentType().equalsIgnoreCase(ContentType.FORM)) {
+                    Response http = apiTool.postLogin(baseUri, JsonUtil.jsonToMap(initModel.getParameters()), initModel.getContentType());
+                    log.info(String.valueOf(http.getStatusCode()));
+                    cookies = http.getCookies();
+                    heards = http.getHeaders();
+                    log.info(http.asString());
+                    log.info(String.valueOf(cookies));
+                    log.info(String.valueOf(heards));
+                } else if (initModel.getContentType().equalsIgnoreCase(ContentType.JSON)) {
+                    Response http = apiTool.postLogin(baseUri, initModel.getParameters(), initModel.getContentType());
+                    log.info(String.valueOf(http.getStatusCode()));
+                    cookies = http.getCookies();
+                    heards = http.getHeaders();
+                    log.info(http.asString());
+                    log.info(String.valueOf(cookies));
+                    log.info(String.valueOf(heards));
+                }
 
-                Response http = apiTool.getHttp(sb.toString(), JsonUtil.jsonToMap(ss.getParameters()), "");
-                log.info(String.valueOf(http.getStatusCode()));
-                cookies = http.getCookies();
-                heards = http.getHeaders();
-                log.info(http.asString());
-                log.info(String.valueOf(cookies));
-                log.info(String.valueOf(heards));
+            } else {
+                throw new RuntimeException("请填写Protocol及HOST!!!");
             }
-
         }
+        //设置初始化 接口地址
+        RestAssured.baseURI = baseUri;
+
     }
 
     @Test
     public void http() {
 
-        for (Object a : easyExcel.readExcel("api.xlsx", 2, 1, ExcelModel.class)) {
-            ExcelModel aa = (ExcelModel) a;
-            if (ObjectUtil.isNotNull(aa)) {
-                StringBuffer sb = new StringBuffer();
-                sb.append(aa.getProtocol());
-                sb.append("://");
-                sb.append(aa.getHost());
-                sb.append(aa.getPath());
-                log.info(sb.toString());
-                if (aa.getMethod().equalsIgnoreCase("get")){
-                    Response http = apiTool.getHttp(sb.toString(), JsonUtil.jsonToMap(aa.getParameters()), ContentType.FORM);
+        for (Object object : easyExcel.readExcel(FILENAME, 2, 1, InfoModel.class)) {
+            InfoModel infoModel = (InfoModel) object;
+            if (ObjectUtil.isNotNull(infoModel.getId()) && JsonUtil.isJson(infoModel.getParameters())) {
+
+                if (infoModel.getMethod().equalsIgnoreCase(GET)) {
+                    Response http = apiTool.getHttp(infoModel.getPath(), JsonUtil.jsonToMap(infoModel.getParameters()), ContentType.FORM, cookies);
                     log.info(String.valueOf(http.getStatusCode()));
-                    log.info(http.print());
+                    log.info(http.asString());
                     log.info(http.getContentType());
-                }else if (aa.getMethod().equalsIgnoreCase("post")){
-                    Response http = apiTool.postHttp(sb.toString(), JsonUtil.jsonToMap(aa.getParameters()), ContentType.FORM);
+                } else if (infoModel.getMethod().equalsIgnoreCase(POST) && infoModel.getContentType().equalsIgnoreCase(ContentType.FORM)) {
+                    Response http = apiTool.postHttp(infoModel.getPath(), JsonUtil.jsonToMap(infoModel.getParameters()), ContentType.FORM);
                     log.info(String.valueOf(http.getStatusCode()));
-                    log.info(http.print());
+                    log.info(http.asString());
+                } else if (infoModel.getMethod().equalsIgnoreCase(POST) && infoModel.getContentType().equalsIgnoreCase(ContentType.JSON)) {
+                    Response http = apiTool.postHttp(infoModel.getPath(), infoModel.getParameters(), ContentType.JSON);
+                    log.info(String.valueOf(http.getStatusCode()));
+                    log.info(http.asString());
                 }
-
+            }else if(JsonUtil.isJson(infoModel.getParameters())){
+                log.error("JSON格式错误"+infoModel.getParameters()+infoModel.getPath());
             }
 
         }
     }
-
-    @Test
-    public void t() {
-        for (Object a : easyExcel.readExcel("api.xlsx", 2, 1, ExcelModel.class)) {
-            ExcelModel aa = (ExcelModel) a;
-            if (ObjectUtil.isNotNull(aa)) {
-                System.out.println(aa.getHost());
-                log.info(aa.getParameters());
-            }
-
-        }
-    }
-
 }

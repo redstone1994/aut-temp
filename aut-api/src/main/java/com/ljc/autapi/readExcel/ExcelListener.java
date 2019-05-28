@@ -2,10 +2,6 @@ package com.ljc.autapi.readExcel;
 
 import com.alibaba.excel.context.AnalysisContext;
 import com.alibaba.excel.event.AnalysisEventListener;
-import com.ljc.autapi.utils.ApiTool;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,23 +11,19 @@ import java.util.List;
  * @Description
  * @Date 2019/4/22-14:33
  **/
-@Slf4j
-@Component
 public class ExcelListener extends AnalysisEventListener {
 
-    @Autowired
-    private ApiTool apiTool;
     //自定义用于暂时存储data。
     //可以通过实例获取该值
     private List<Object> datas = new ArrayList<Object>();
     public void invoke(Object object, AnalysisContext context) {
-        System.out.println("当前行："+context.getCurrentRowNum());
+
         datas.add(object);//数据存储到list，供批量处理，或后续自己业务逻辑处理。
 //        doSomething(object);//根据自己业务做处理
     }
     private void doSomething(Object object) {
         //1、入库调用接口
-//        ExcelModel aa = (ExcelModel) object;
+//        InfoModel aa = (InfoModel) object;
     }
     public void doAfterAllAnalysed(AnalysisContext context) {
 //        datas.clear();//解析结束销毁不用的资源
