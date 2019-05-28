@@ -7,7 +7,7 @@ import com.ljc.autapi.readExcel.InitModel;
 import com.ljc.autapi.utils.ApiTool;
 import com.ljc.autapi.utils.JsonUtil;
 import com.ljc.autapi.utils.ObjectUtil;
-import io.qameta.allure.Allure;
+import io.qameta.allure.*;
 import io.restassured.RestAssured;
 import io.restassured.config.SSLConfig;
 import io.restassured.http.Headers;
@@ -48,7 +48,7 @@ public class ApiTest extends AbstractTestNGSpringContextTests {
     private Map<String, String> cookies = new HashMap<>();
     private Headers heards = null;
 
-//    @BeforeClass
+    @BeforeClass
     public void init() {
         for (Object object : easyExcel.readExcel(FILENAME, 1, 2, InitModel.class)) {
             InitModel initModel = (InitModel) object;
@@ -86,6 +86,8 @@ public class ApiTest extends AbstractTestNGSpringContextTests {
 
     }
 
+    @Feature("ss")
+    @Story("sss")
     @Test
     public void http() {
 
