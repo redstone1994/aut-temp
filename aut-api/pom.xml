@@ -93,9 +93,10 @@
             <artifactId>testng</artifactId>
             <version>6.14.3</version>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/io.qameta.allure/allure-testng -->
         <dependency>
             <groupId>io.qameta.allure</groupId>
-            <artifactId>allure-java-commons</artifactId>
+            <artifactId>allure-testng</artifactId>
             <version>${allure.version}</version>
         </dependency>
     </dependencies>
