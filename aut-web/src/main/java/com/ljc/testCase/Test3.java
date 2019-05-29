@@ -9,8 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.Selenide.open;
+import static com.codeborne.selenide.Selenide.*;
 
 /**
  * @Author Lijc
@@ -31,8 +30,9 @@ public class Test3 {
     public  void test2() {
         open("/");
         logger.info("success open!!!");
-        $(IndexDom.INPUT).setValue("百度地图");
-        $(IndexDom.BTN).click();
+        $(".soutu-btn").click();
+        $(".upload-pic").uploadFromClasspath("52.jpg");
+        sleep(10000);
 
     }
 }

@@ -19,10 +19,10 @@ public class Te {
     }
 
 }
-
 class Person{
     String name;
     void talk(String name){
         System.out.println("My name is "+ this.name);
     }
 }
+
