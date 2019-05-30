@@ -7,9 +7,10 @@ import com.ljc.autapi.readExcel.InitModel;
 import com.ljc.autapi.utils.ApiTool;
 import com.ljc.autapi.utils.JsonUtil;
 import com.ljc.autapi.utils.ObjectUtil;
-import io.qameta.allure.*;
+import io.qameta.allure.Allure;
+import io.qameta.allure.Feature;
+import io.qameta.allure.Story;
 import io.restassured.RestAssured;
-import io.restassured.config.SSLConfig;
 import io.restassured.http.Headers;
 import io.restassured.response.Response;
 import lombok.extern.slf4j.Slf4j;
@@ -19,12 +20,10 @@ import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import static io.qameta.allure.Allure.step;
-
 import java.util.HashMap;
 import java.util.Map;
 
-import static io.restassured.RestAssured.given;
+import static io.qameta.allure.Allure.step;
 
 /**
  * @Author Lijc

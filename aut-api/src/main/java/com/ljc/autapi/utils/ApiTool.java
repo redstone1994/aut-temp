@@ -22,6 +22,7 @@ public class ApiTool {
     public Response postLogin(String uri, String parm) {
         return given()
                 .config((RestAssured.config().sslConfig(new SSLConfig().relaxedHTTPSValidation())))
+                .header("User-Agent","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36")
                 .body(parm)
                 .get(uri);
     }

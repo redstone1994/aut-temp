@@ -16,6 +16,7 @@
         <project.build.targetEncoding>UTF-8</project.build.targetEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <selenide.version>5.2.2</selenide.version>
+        <allure.version>2.10.0</allure.version>
     </properties>
     <dependencies>
         <!-- https://mvnrepository.com/artifact/com.codeborne/selenide -->
@@ -23,6 +24,11 @@
             <groupId>com.codeborne</groupId>
             <artifactId>selenide</artifactId>
             <version>${selenide.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.qameta.allure</groupId>
+            <artifactId>allure-testng</artifactId>
+            <version>${allure.version}</version>
         </dependency>
     </dependencies>
     <build>

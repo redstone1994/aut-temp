@@ -55,14 +55,13 @@ public class Test1 {
 
         System.out.println("=========Case1=======");
         Assert.assertEquals(1, 1," is not equal");
+        Assertion.verifyEquals(1, 2,"is not equal ");
     }
 
     @Test
     public void Case2(){
         System.out.println("=========Case2=======");
         Assertion.verifyEquals(1, 2,"is not equal ");
-
-
 
     }
 
