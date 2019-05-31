@@ -7,10 +7,18 @@ green='\033[0;32m'
 yellow='\033[0;33m'
 plain='\033[0m'
 
-#[[ $EUID -ne 0 ]] && echo -e "[${red}Error${plain}] This script must be run as root!" && exit 1
+[[ $EUID -ne 0 ]] && echo -e "[${red}Error${plain}] This script must be run as root!" && exit 1
 
 version=(k8s-mater k8s-salve docker)
 
+conf_hosts(){
+	echo "192.168.1.180 k8s-master" >> /etc/hosts
+	echo "192.168.1.181 k8s-node1" >> /etc/hosts
+	echo "192.168.1.182 k8s-node2" >> /etc/hosts
+	echo "192.168.1.183 k8s-node3" >> /etc/hosts
+	echo "192.168.1.190 harbor" >> /etc/hosts
+	cat /etc/hosts
+}
 
 disable_selinux(){
     if [ -s /etc/selinux/config ] && grep 'SELINUX=enforcing' /etc/selinux/config; then
@@ -140,17 +148,9 @@ centosversion() {
     fi
 }
 
-conf_hosts(){
-	echo "192.168.1.180 k8smaster" >> /etc/hosts
-	echo "192.168.1.181 k8snode1" >> /etc/hosts
-	echo "192.168.1.182 k8snode2" >> /etc/hosts
-	echo "192.168.1.183 k8snode3" >> /etc/hosts
-	echo "192.168.1.190 harbor" >> /etc/hosts
-	cat /etc/hosts
-}
 
 create_k8sconf(){
-	echo -e "[${green}INFO:${plain}] 开始创建k8s配置文件==========="
+	echo -e "[${green}INFO:${plain}] Start creating the k8s configuration file..."
 
 	cat > /etc/sysctl.d/k8s.conf <<-EOF
 	net.bridge.bridge-nf-call-ip6tables = 1
@@ -161,14 +161,14 @@ create_k8sconf(){
 
 	modprobe br_netfilter
 	sysctl -p /etc/sysctl.d/k8s.conf
-	echo -e "[${green}INFO:${plain}] 创建k8s配置文件结束==========="
+	echo -e "[${green}INFO:${plain}] Create k8s configuration file to complete..."
 
 }
 
 
 
 install_docker(){
-	echo -e "[${green}INFO:${plain}] 开始安装docker==========="
+	echo -e "[${green}INFO:${plain}] Start installing docker..."
 	yum install -y yum-utils device-mapper-persistent-data lvm2
 	yum-config-manager --add-repo http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo
 	yum makecache fast
@@ -196,12 +196,12 @@ install_docker(){
 	systemctl start docker
 	systemctl enable docker
     docker version
-	echo -e "[${green}INFO:${plain}] 安装docker完成==========="
+	echo -e "[${green}INFO:${plain}] Install docker to complete..."
 
 }
 
 k8s_master_ini(){
-	echo -e "[${green}INFO:${plain}] 安装kubernetes依赖docker镜像==========="
+	echo -e "[${green}INFO:${plain}] Start installing k8s-master dependency docker image..."
 
 	local images=(kube-proxy:v1.14.1
 		kube-scheduler:v1.14.1
@@ -217,11 +217,11 @@ k8s_master_ini(){
 	  docker rmi ljc359120730/$image
 	done
 
-	echo -e "[${green}INFO:${plain}] 安装kubernetes依赖docker镜像结束==========="
+	echo -e "[${green}INFO:${plain}] Installation of k8s-master depends on docker image..."
 }
 
 k8s_salve_ini(){
-    echo -e "[${green}INFO:${plain}] 安装kubernetes依赖docker镜像==========="
+    echo -e "[${green}INFO:${plain}] Start installing k8s-slave dependency docker image..."
 
 	local images=(kube-proxy:v1.14.1
 			pause:3.1
@@ -233,11 +233,11 @@ k8s_salve_ini(){
 	  docker rmi ljc359120730/$image
 	done
 
-	echo -e "[${green}INFO:${plain}] 安装kubernetes依赖docker镜像结束==========="
+	echo -e "[${green}INFO:${plain}] Installation of k8s-slave depends on docker image..."
 }
 
 install_kubernetes(){
-	echo -e "[${green}INFO:${plain}] 开始安装kubernetes==========="
+	echo -e "[${green}INFO:${plain}] Start installing k8s..."
 	cat > /etc/yum.repos.d/kubernetes.repo <<-EOF
 	[kubernetes]
 	name=Kubernetes
@@ -254,15 +254,12 @@ install_kubernetes(){
 	    --disableexcludes=kubernetes
 	systemctl enable kubelet && systemctl start kubelet
 
-	kubectl version
-
-
-	echo -e "[${green}INFO:${plain}] 安装kubernetes完成==========="
+	echo -e "[${green}INFO:${plain}] Installation k8s completed..."
 
 }
 
 init_kubernetes(){
-	echo -e "[${green}INFO:${plain}] 初始化kubernetes==========="
+	echo -e "[${green}INFO:${plain}] start initializing kubernetes..."
 
 	#echo  "KUBELET_EXTRA_ARGS=--fail-swap-on=false" > /etc/sysconfig/kubelet
 
@@ -277,7 +274,8 @@ init_kubernetes(){
       mkdir -p $HOME/.kube
       cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
       chown $(id -u):$(id -g) $HOME/.kube/config
-      echo -e "[${green}INFO:${plain}] 初始化kubernetes完成==========="
+      kubectl version
+      echo -e "[${green}INFO:${plain}] Initialization k8s complete..."
 }
 
 main(){
@@ -292,6 +290,7 @@ if is_64bit&&getversion 7; then
         create_k8sconf
         install_docker
         k8s_master_ini
+        install_kubernetes
         init_kubernetes
     elif [ "${option}" == "2" ]; then
         yum_ini
@@ -301,6 +300,7 @@ if is_64bit&&getversion 7; then
         install_docker
         disable_selinux
         k8s_salve_ini
+        install_kubernetes
     elif [ "${option}" == "3" ]; then
         yum_ini
         disable_swap
@@ -308,7 +308,7 @@ if is_64bit&&getversion 7; then
         install_docker
         disable_selinux
     else
-        printf "============="
+        echo echo -e "[${red}Error${plain}] Your system does not support this script !!!"
     fi
 
 fi
