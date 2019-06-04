@@ -2,9 +2,9 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
 <suite name="All Test Suite">
     <listeners>
-        <listener class-name="com.ljc.utils.AllureReporterListener" />
-        <listener class-name="com.ljc.utils.RetryListener" />
-        <listener class-name="com.ljc.utils.AssertionListener" />
+        <listener class-name="com.ljc.listener.AllureReporterListener" />
+        <listener class-name="com.ljc.listener.RetryListener" />
+        <listener class-name="com.ljc.listener.AssertionListener" />
     </listeners>
     <test verbose="2" name="test2">
         <classes>

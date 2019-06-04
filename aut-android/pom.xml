@@ -12,6 +12,14 @@
     <artifactId>aut-android</artifactId>
     <properties>
         <appium.version>7.0.0</appium.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <java.version>1.8</java.version>
+        <aspectj.version>1.9.2</aspectj.version>
+        <tesng.version>6.14.3</tesng.version>
+        <allure.version>2.10.0</allure.version>
+        <slf4j.version>1.7.26</slf4j.version>
+        <logback.version>1.2.3</logback.version>
     </properties>
     <dependencies>
         <!-- https://mvnrepository.com/artifact/io.appium/java-client -->
@@ -26,7 +34,33 @@
             <version>5.2.2</version>
             <scope>compile</scope>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/org.testng/testng -->
+        <dependency>
+            <groupId>org.testng</groupId>
+            <artifactId>testng</artifactId>
+            <version>${tesng.version}</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/io.qameta.allure/allure-testng -->
+        <dependency>
+            <groupId>io.qameta.allure</groupId>
+            <artifactId>allure-testng</artifactId>
+            <version>${allure.version}</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-api -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>${slf4j.version}</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/ch.qos.logback/logback-classic -->
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>${logback.version}</version>
+        </dependency>
     </dependencies>
+
     <build>
         <plugins>
             <plugin>
