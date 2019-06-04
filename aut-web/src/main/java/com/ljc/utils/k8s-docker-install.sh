@@ -289,6 +289,7 @@ if is_64bit&&getversion 7; then
         date_config
         create_k8sconf
         install_docker
+        disable_selinux
         k8s_master_ini
         install_kubernetes
         init_kubernetes
@@ -297,6 +298,7 @@ if is_64bit&&getversion 7; then
         conf_hosts
         disable_swap
         date_config
+        create_k8sconf
         install_docker
         disable_selinux
         k8s_salve_ini
