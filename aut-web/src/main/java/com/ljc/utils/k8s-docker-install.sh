@@ -42,6 +42,13 @@ yes | cp /etc/fstab /etc/fstab_bak
 cat /etc/fstab_bak |grep -v swap > /etc/fstab
 
 }
+
+disable_firewall(){
+	echo -e "[${green}INFO:${plain}] Start disable firewall..."
+		systemctl stop firewalld
+		systemctl disable firewalld
+	echo -e "[${green}INFO:${plain}] Turn off firewall complete..."
+}
 date_config(){
 #时间同步
 yum install -y ntpdate
@@ -286,6 +293,7 @@ if is_64bit&&getversion 7; then
         yum_ini
         conf_hosts
         disable_swap
+        disable_firewall
         date_config
         create_k8sconf
         install_docker
@@ -297,6 +305,7 @@ if is_64bit&&getversion 7; then
         yum_ini
         conf_hosts
         disable_swap
+        disable_firewall
         date_config
         create_k8sconf
         install_docker
@@ -306,6 +315,7 @@ if is_64bit&&getversion 7; then
     elif [ "${option}" == "3" ]; then
         yum_ini
         disable_swap
+        disable_firewall
         date_config
         install_docker
         disable_selinux
