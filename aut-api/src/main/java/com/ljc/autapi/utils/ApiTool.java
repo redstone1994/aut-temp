@@ -19,10 +19,12 @@ import static io.restassured.RestAssured.given;
 @Slf4j
 public class ApiTool {
 
+    private static final String USERAGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36";
+
     public Response postLogin(String uri, String parm) {
         return given()
                 .config((RestAssured.config().sslConfig(new SSLConfig().relaxedHTTPSValidation())))
-                .header("User-Agent","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36")
+                .header("User-Agent", USERAGENT)
                 .body(parm)
                 .get(uri);
     }
@@ -30,17 +32,17 @@ public class ApiTool {
     public Response postLogin(String uri, Map parm) {
         Response response = given()
                 .config((RestAssured.config().sslConfig(new SSLConfig().relaxedHTTPSValidation())))
-                .header("User-Agent","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36")
+                .header("User-Agent", USERAGENT)
                 .body(parm)
                 .get(uri);
         return response;
     }
 
-    public Response getHttp(String path, Map parm,Map cookies) {
+    public Response getHttp(String path, Map parm, Map cookies) {
 
         Response response = given()
                 .config((RestAssured.config().sslConfig(new SSLConfig().relaxedHTTPSValidation())))
-                .header("User-Agent","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36")
+                .header("User-Agent", USERAGENT)
                 .params(parm)
                 .cookies(cookies)
                 .when()
@@ -51,7 +53,7 @@ public class ApiTool {
     public Response postHttp(String path, String parm) {
         Response response = given()
                 .config((RestAssured.config().sslConfig(new SSLConfig().relaxedHTTPSValidation())))
-                .header("User-Agent","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36")
+                .header("User-Agent", USERAGENT)
                 .body(parm)
                 .post(path);
         return response;
@@ -60,7 +62,7 @@ public class ApiTool {
     public Response postHttp(String path, Map parm) {
         Response response = given()
                 .config((RestAssured.config().sslConfig(new SSLConfig().relaxedHTTPSValidation())))
-                .header("User-Agent","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36")
+                .header("User-Agent", USERAGENT)
                 .body(parm)
                 .post(path);
         return response;

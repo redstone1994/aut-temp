@@ -106,7 +106,6 @@ public class ApiTest extends AbstractTestNGSpringContextTests {
                 } else if (infoModel.getMethod().equalsIgnoreCase(POST) && infoModel.getContentType().equalsIgnoreCase(ContentType.FORM)) {
                     Response http = apiTool.postHttp(infoModel.getPath(), JsonUtil.jsonToMap(infoModel.getParameters()));
                     log.info(String.valueOf(http.getStatusCode()));
-
                     log.info(http.asString());
                 } else if (infoModel.getMethod().equalsIgnoreCase(POST) && infoModel.getContentType().equalsIgnoreCase(ContentType.JSON)) {
                     Response http = apiTool.postHttp(infoModel.getPath(), infoModel.getParameters());

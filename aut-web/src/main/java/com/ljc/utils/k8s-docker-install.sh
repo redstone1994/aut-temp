@@ -28,8 +28,10 @@ disable_selinux(){
 }
 
 yum_ini(){
+    if [ -s /etc/yum.repos.d/CentOS-Base.repo ] ; then
 	mv /etc/yum.repos.d/CentOS-Base.repo /etc/yum.repos.d/CentOS-Base.repo.bak
 	curl -o /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-7.repo
+	fi
 	yum clean all
 	yum makecache
 	yum -y install wget
