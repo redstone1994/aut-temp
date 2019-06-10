@@ -55,7 +55,7 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
-<!--            <scope>test</scope>-->
+            <!--            <scope>test</scope>-->
         </dependency>
         <!-- https://mvnrepository.com/artifact/io.rest-assured/rest-assured -->
         <dependency>
@@ -120,6 +120,8 @@
                             <value>1</value>
                         </property>
                     </properties>
+                    <testFailureIgnore>true</testFailureIgnore>
+
                     <!--并行执行case-->
                     <!--<parallel>methods</parallel>-->
                     <!--<threadCount>10</threadCount>-->
@@ -128,6 +130,7 @@
                     <argLine>
                         -javaagent:"${settings.localRepository}/org/aspectj/aspectjweaver/${aspectj.version}/aspectjweaver-${aspectj.version}.jar"
                     </argLine>
+                    <argLine>-Dfile.encoding=UTF-8</argLine>
                     <systemPropertyVariables>
                         <allure.results.directory>${project.build.directory}/allure-results</allure.results.directory>
                         <allure.link.issue.pattern>https://example.org/browse/{}</allure.link.issue.pattern>

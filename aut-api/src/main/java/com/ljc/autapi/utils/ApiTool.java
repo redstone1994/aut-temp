@@ -39,15 +39,20 @@ public class ApiTool {
     }
 
     public Response getHttp(String path, Map parm, Map cookies) {
+        try {
+            Response response = given()
+                    .config((RestAssured.config().sslConfig(new SSLConfig().relaxedHTTPSValidation())))
+                    .header("User-Agent", USERAGENT)
+                    .params(parm)
+                    .cookies(cookies)
+                    .when()
+                    .get(path);
+            return response;
+        }catch (Exception e){
+            log.error(e.toString());
+        }
+        return null;
 
-        Response response = given()
-                .config((RestAssured.config().sslConfig(new SSLConfig().relaxedHTTPSValidation())))
-                .header("User-Agent", USERAGENT)
-                .params(parm)
-                .cookies(cookies)
-                .when()
-                .get(path);
-        return response;
     }
 
     public Response postHttp(String path, String parm) {

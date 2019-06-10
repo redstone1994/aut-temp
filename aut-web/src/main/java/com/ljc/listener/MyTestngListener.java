@@ -1,5 +1,9 @@
 package com.ljc.listener;
 
+import com.codeborne.selenide.WebDriverRunner;
+import io.qameta.allure.Attachment;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
 import org.testng.ITestResult;
 import org.testng.TestListenerAdapter;
 
@@ -11,7 +15,7 @@ import java.util.List;
  * @Description 断言监听
  * @Date 2019/4/22-11:47
  **/
-public class AssertionListener extends TestListenerAdapter {
+public class MyTestngListener extends TestListenerAdapter {
 
     @Override
     public void onTestStart(ITestResult result) {
@@ -21,6 +25,7 @@ public class AssertionListener extends TestListenerAdapter {
 
     @Override
     public void onTestFailure(ITestResult tr) {
+        screenshot();
         this.handleAssertion(tr);
     }
 
@@ -34,6 +39,14 @@ public class AssertionListener extends TestListenerAdapter {
         this.handleAssertion(tr);
     }
 
+    //失败重跑
+    @Attachment(value = "screen shot",type = "image/png")
+    public byte[]  screenshot(){
+        byte[] screenshotAs = ((TakesScreenshot) WebDriverRunner.getWebDriver() ).getScreenshotAs(OutputType.BYTES);
+        return screenshotAs;
+    }
+
+    //重写断言
     private int index = 0;
 
     private void handleAssertion(ITestResult tr){
