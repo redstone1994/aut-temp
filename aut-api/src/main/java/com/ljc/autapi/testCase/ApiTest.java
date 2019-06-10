@@ -10,6 +10,7 @@ import com.ljc.autapi.utils.ObjectUtil;
 import io.qameta.allure.Allure;
 import io.qameta.allure.Feature;
 import io.qameta.allure.Story;
+
 import io.restassured.RestAssured;
 import io.restassured.http.Headers;
 import io.restassured.response.Response;
@@ -85,8 +86,7 @@ public class ApiTest extends AbstractTestNGSpringContextTests {
 
     }
 
-    @Feature("ss")
-    @Story("sss")
+
     @Test
     public void http() {
 
@@ -95,22 +95,36 @@ public class ApiTest extends AbstractTestNGSpringContextTests {
             if (ObjectUtil.isNotNull(infoModel.getId()) && JsonUtil.isJson(infoModel.getParameters())) {
 
                 if (infoModel.getMethod().equalsIgnoreCase(GET)) {
-                    Response http = apiTool.getHttp(infoModel.getPath(), JsonUtil.jsonToMap(infoModel.getParameters()), cookies);
-                    log.info(String.valueOf(http.getStatusCode()));
-                    step(http.asString());
-                    Allure.addAttachment("状态", String.valueOf(http.getStatusCode()));
-                    Allure.addAttachment("时间", String.valueOf(http.getTime()));
-                    System.out.println(http.getHeaders());
-                    log.info(http.asString());
-                    http.print();
+                    try {
+                        Response http = apiTool.getHttp(infoModel.getPath(), JsonUtil.jsonToMap(infoModel.getParameters()), cookies);
+                        log.info(String.valueOf(http.getStatusCode()));
+                        Allure.feature(http.asString());
+                        Allure.story(http.asString());
+                        System.out.println(http.getHeaders());
+                        log.info(http.asString());
+                        http.print();
+                    }catch (Exception e){
+                        log.error(String.valueOf(e));
+                    }
+
                 } else if (infoModel.getMethod().equalsIgnoreCase(POST) && infoModel.getContentType().equalsIgnoreCase(ContentType.FORM)) {
-                    Response http = apiTool.postHttp(infoModel.getPath(), JsonUtil.jsonToMap(infoModel.getParameters()));
-                    log.info(String.valueOf(http.getStatusCode()));
-                    log.info(http.asString());
+                    try {
+                        Response http = apiTool.postHttp(infoModel.getPath(), JsonUtil.jsonToMap(infoModel.getParameters()));
+                        log.info(String.valueOf(http.getStatusCode()));
+                        log.info(http.asString());
+                    }catch (Exception e){
+                        log.error(String.valueOf(e));
+                    }
+
                 } else if (infoModel.getMethod().equalsIgnoreCase(POST) && infoModel.getContentType().equalsIgnoreCase(ContentType.JSON)) {
-                    Response http = apiTool.postHttp(infoModel.getPath(), infoModel.getParameters());
-                    log.info(String.valueOf(http.getStatusCode()));
-                    log.info(http.asString());
+                    try {
+                        Response http = apiTool.postHttp(infoModel.getPath(), infoModel.getParameters());
+                        log.info(String.valueOf(http.getStatusCode()));
+                        log.info(http.asString());
+                    }catch (Exception e){
+                        log.error(String.valueOf(e));
+                    }
+
                 }
             }else if(JsonUtil.isJson(infoModel.getParameters())){
                 log.error("JSON格式错误"+infoModel.getParameters()+infoModel.getPath());

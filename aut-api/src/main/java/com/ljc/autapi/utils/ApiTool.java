@@ -1,5 +1,8 @@
 package com.ljc.autapi.utils;
 
+import io.qameta.allure.Feature;
+import io.qameta.allure.Step;
+import io.qameta.allure.Story;
 import io.restassured.RestAssured;
 import io.restassured.config.SSLConfig;
 import io.restassured.response.Response;
@@ -39,7 +42,6 @@ public class ApiTool {
     }
 
     public Response getHttp(String path, Map parm, Map cookies) {
-        try {
             Response response = given()
                     .config((RestAssured.config().sslConfig(new SSLConfig().relaxedHTTPSValidation())))
                     .header("User-Agent", USERAGENT)
@@ -48,12 +50,9 @@ public class ApiTool {
                     .when()
                     .get(path);
             return response;
-        }catch (Exception e){
-            log.error(e.toString());
-        }
-        return null;
 
     }
+
 
     public Response postHttp(String path, String parm) {
         Response response = given()
@@ -63,6 +62,7 @@ public class ApiTool {
                 .post(path);
         return response;
     }
+
 
     public Response postHttp(String path, Map parm) {
         Response response = given()
