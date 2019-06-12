@@ -11,7 +11,7 @@ import java.util.List;
  * @Description 断言监听
  * @Date 2019/4/22-11:47
  **/
-public class AssertionListener extends TestListenerAdapter {
+public class MyTestngListener extends TestListenerAdapter {
 
     @Override
     public void onTestStart(ITestResult result) {
@@ -34,6 +34,8 @@ public class AssertionListener extends TestListenerAdapter {
         this.handleAssertion(tr);
     }
 
+
+    //重写断言
     private int index = 0;
 
     private void handleAssertion(ITestResult tr){

@@ -1,5 +1,8 @@
 package com.ljc.autapi.testCase;
 
+import com.ljc.autapi.listener.Assertion;
+import com.ljc.autapi.listener.MyTestngListener;
+import com.ljc.autapi.listener.RetryListener;
 import com.ljc.autapi.readExcel.ContentType;
 import com.ljc.autapi.readExcel.EasyExcel;
 import com.ljc.autapi.readExcel.InfoModel;
@@ -8,9 +11,6 @@ import com.ljc.autapi.utils.ApiTool;
 import com.ljc.autapi.utils.JsonUtil;
 import com.ljc.autapi.utils.ObjectUtil;
 import io.qameta.allure.Allure;
-import io.qameta.allure.Feature;
-import io.qameta.allure.Story;
-
 import io.restassured.RestAssured;
 import io.restassured.http.Headers;
 import io.restassured.response.Response;
@@ -19,19 +19,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
 import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import static io.qameta.allure.Allure.step;
 
 /**
  * @Author Lijc
  * @Description 执行测试，继承AbstractTestNGSpringContextTests
  * @Date 2019/4/12-10:58
  **/
-
+@Listeners(value = {MyTestngListener.class, RetryListener.class})
 @SpringBootTest
 @Slf4j
 public class ApiTest extends AbstractTestNGSpringContextTests {
@@ -61,20 +61,12 @@ public class ApiTest extends AbstractTestNGSpringContextTests {
                 log.info("接口地址为：" + baseUri);
                 if (ObjectUtil.isNotNull(initModel.getPath()) && initModel.getContentType().equalsIgnoreCase(ContentType.FORM)) {
                     Response http = apiTool.postLogin(baseUri, JsonUtil.jsonToMap(initModel.getParameters()));
-                    log.info(String.valueOf(http.getStatusCode()));
                     cookies = http.getCookies();
                     heards = http.getHeaders();
-                    log.info(http.asString());
-                    log.info(String.valueOf(cookies));
-                    log.info(String.valueOf(heards));
                 } else if (initModel.getContentType().equalsIgnoreCase(ContentType.JSON)) {
                     Response http = apiTool.postLogin(baseUri, initModel.getParameters());
-                    log.info(String.valueOf(http.getStatusCode()));
                     cookies = http.getCookies();
                     heards = http.getHeaders();
-                    log.info(http.asString());
-                    log.info(String.valueOf(cookies));
-                    log.info(String.valueOf(heards));
                 }
 
             } else {
@@ -97,12 +89,9 @@ public class ApiTest extends AbstractTestNGSpringContextTests {
                 if (infoModel.getMethod().equalsIgnoreCase(GET)) {
                     try {
                         Response http = apiTool.getHttp(infoModel.getPath(), JsonUtil.jsonToMap(infoModel.getParameters()), cookies);
-                        log.info(String.valueOf(http.getStatusCode()));
-                        Allure.feature(http.asString());
-                        Allure.story(http.asString());
+                        Assertion.verifyEquals(http.getStatusCode(),200,"请求错误");
+                        Allure.feature(infoModel.getId()+"=====>>>"+http.asString());
                         System.out.println(http.getHeaders());
-                        log.info(http.asString());
-                        http.print();
                     }catch (Exception e){
                         log.error(String.valueOf(e));
                     }
@@ -132,4 +121,5 @@ public class ApiTest extends AbstractTestNGSpringContextTests {
 
         }
     }
+
 }

@@ -1,6 +1,5 @@
 package com.ljc.testCase;
 
-import com.ljc.pageObject.IndexDom;
 import com.ljc.utils.DriverInit;
 import io.qameta.allure.Feature;
 import io.qameta.allure.Story;

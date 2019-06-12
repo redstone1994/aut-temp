@@ -10,15 +10,15 @@ public class Retry implements IRetryAnalyzer {
 
     private static Logger logger= LoggerFactory.getLogger(Retry.class);
     private int retryCount = 1;
-    public static final int maxRetryCount = 0; //重跑次数
+    public static final int maxRetryCount = 1; //重跑次数
 
     @Override
     public boolean retry(ITestResult iTestResult) {
         if (retryCount <= maxRetryCount) {
             String message="方法<"+iTestResult.getName()+">执行失败，重试第"+retryCount+"次";
             retryCount++;
-            logger.info(message);
             Reporter.setCurrentTestResult(iTestResult);
+            logger.info(message);
             Reporter.log(message);
             return true;
         }

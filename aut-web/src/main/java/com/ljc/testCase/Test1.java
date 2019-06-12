@@ -2,7 +2,8 @@ package com.ljc.testCase;
 
 import com.ljc.listener.Assertion;
 import com.ljc.listener.MyTestngListener;
-import com.ljc.pageObject.IndexDom;
+import com.ljc.listener.RetryListener;
+import com.ljc.pageObject.Index;
 import com.ljc.utils.DriverInit;
 import io.qameta.allure.Feature;
 import io.qameta.allure.Story;
@@ -19,7 +20,7 @@ import static com.codeborne.selenide.Selenide.*;
  * @Description
  * @Date 2019/3/28-10:35
  **/
-//@Listeners(value = {MyTestngListener.class, com.ljc.listener.RetryListener.class})
+@Listeners(value = {MyTestngListener.class, RetryListener.class})
 public class Test1 {
 
     Logger logger = LoggerFactory.getLogger(Test1.class);
@@ -36,10 +37,10 @@ public class Test1 {
         open("/");
         logger.info("success open!!!");
         Assertion.verifyEquals(1, 2, "is not equal ");
-        $(IndexDom.INPUT).setValue("百度地图");
+        $(Index.INPUT.getElement()).setValue("百度地图");
 
         $(".aa").click();
-        $(IndexDom.BTN).click();
+        $(Index.BTN.getElement()).click();
     }
 
     @Feature("demo")
@@ -50,9 +51,9 @@ public class Test1 {
         logger.info("success open!!!");
 
         Assertion.verifyEquals(title(), "百度一下，你就知道", "ssss=========");
-        $(IndexDom.INPUT).setValue("百度地图");
+        $(Index.INPUT.getElement()).setValue("百度地图");
 
-        $(IndexDom.BTN).click();
+        $(Index.BTN.getElement()).click();
     }
 
     @Test
