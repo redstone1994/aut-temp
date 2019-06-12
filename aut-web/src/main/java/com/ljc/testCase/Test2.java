@@ -1,8 +1,7 @@
 package com.ljc.testCase;
 
-import com.ljc.pageObject.IndexDom;
+import com.ljc.pageObject.Index;
 import com.ljc.utils.DriverInit;
-import io.qameta.allure.Allure;
 import io.qameta.allure.Feature;
 import io.qameta.allure.Story;
 import org.slf4j.Logger;
@@ -32,10 +31,9 @@ public class Test2 {
     public  void test2() {
         open("/");
         logger.info("success open!!!");
-        $(IndexDom.INPUT).setValue("百度地图");
-        Allure.addAttachment("aaa","bbb");
+        $(Index.INPUT.getElement()).setValue("百度地图");
 
-        $(IndexDom.BTN).click();
+        $(Index.BTN.getElement()).click();
 
     }
 }
