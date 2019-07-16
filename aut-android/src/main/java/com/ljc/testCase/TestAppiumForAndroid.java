@@ -36,36 +36,33 @@ public class TestAppiumForAndroid {
         File app = new File(appDir,"Kf-1.0-20181121-test.apk");
 
         DesiredCapabilities caps=new DesiredCapabilities();
-        //x5内核
-        ChromeOptions chromeOptions=new ChromeOptions();
-        chromeOptions.setExperimentalOption("androidProcess","com.tencent.mm:appbrand0");
-        caps.setCapability(ChromeOptions.CAPABILITY,chromeOptions);
 
         caps.setCapability(MobileCapabilityType.PLATFORM_NAME,"Android");
         caps.setCapability(MobileCapabilityType.PLATFORM_VERSION,"7.1.1");
         caps.setCapability(MobileCapabilityType.DEVICE_NAME,"RC7HDEQG7SHEMZSK");
         caps.setCapability(MobileCapabilityType.NEW_COMMAND_TIMEOUT,"10");
         caps.setCapability(MobileCapabilityType.NO_RESET,true);
-        caps.setCapability(MobileCapabilityType.BROWSER_NAME,"");
+        caps.setCapability("noSign",true);
 
         //support Chinese支持中文输入
 //        caps.setCapability("unicodeKeyboard",true);
 //        caps.setCapability("resetKeyboard",true);
-        caps.setCapability("noSign",true);
+
+
+        //x5内核
+        ChromeOptions chromeOptions=new ChromeOptions();
+        chromeOptions.setExperimentalOption("androidProcess","com.tencent.mm:appbrand0");
 
         //caps.setCapability(MobileCapabilityType.APP, app.getAbsolutePath());
-        caps.setCapability(MobileCapabilityType.APP,"");
-        caps.setCapability(MobileCapabilityType.FORCE_MJSONWP,true);
+//        caps.setCapability(MobileCapabilityType.APP,"");
+        caps.setCapability(MobileCapabilityType.BROWSER_NAME,"");
+//        caps.setCapability(MobileCapabilityType.FORCE_MJSONWP,true);
         caps.setCapability("autoGrantPermissions",true);
-//        caps.setCapability(MobileCapabilityType.AUTOMATION_NAME,"selendroid");
-        caps.setCapability("appPackage", "com.tencent.mm");
-        caps.setCapability("appActivity", "ui.LauncherUI");
-        caps.setCapability("chromedriverExecutableDir","C:\\Users\\Administrator\\Desktop\\chromedriver_win32 (1)\\");
+//        caps.setCapability("appPackage", "com.tencent.mm");
+//        caps.setCapability("appActivity", "ui.LauncherUI");
+//        caps.setCapability("chromedriverExecutableDir","C:\\Users\\Administrator\\Desktop\\chromedriver_win32 (1)\\");
         caps.setCapability("recreateChromeDriverSessions",true);
-
-//        System.out.println(app.getAbsolutePath());
-
-
+        caps.setCapability(ChromeOptions.CAPABILITY, chromeOptions);
 
         driver =new AndroidDriver(new URL("http://127.0.0.1:4723/wd/hub"), caps);
 //        driver =new AndroidDriver<>(new URL("http://192.168.5.94:4723/wd/hub"), caps);
@@ -77,6 +74,7 @@ public class TestAppiumForAndroid {
 
     @Test
     public void setUp() throws InterruptedException {
+        driver.unlockDevice();
         int width=driver.manage().window().getSize().getWidth();
         int height=driver.manage().window().getSize().getHeight();
         System.out.println(width+"*"+height);
