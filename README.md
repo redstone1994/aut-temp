@@ -1,4 +1,4 @@
-# 自动化测试模板
+# 自动化测试脚手架
 - web:selenide
 - android:appium
 - api:excel作为数据驱动
